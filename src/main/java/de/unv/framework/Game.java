@@ -1,0 +1,259 @@
+package de.unv.framework;
+
+import de.unv.game.states.StateManager;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
+
+public class Game extends JPanel implements Runnable {
+
+    private final JFrame frame;
+    public static final int multiplier = 3;
+    public KeyBoard keyB = new KeyBoard();
+    private final BufferedImage image =
+            new BufferedImage(Game.X * multiplier, Game.Y * multiplier, BufferedImage.TYPE_INT_RGB);
+    private final int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
+    public StateManager stateManager;
+//    public Memory memory;
+    private Thread gameThread;
+    public static final int X = 640;
+    public static final int Y = 360;
+    public final int fps = 120;
+
+//    Sound music = new Sound();
+//    Sound effect = new Sound();
+    boolean test = false;
+
+    public Game(JFrame window) {
+        setPreferredSize(new Dimension(X * multiplier, Y * multiplier));
+        this.setDoubleBuffered(true);
+        this.addKeyListener(keyB);
+        this.setFocusable(true);
+        this.frame = window;
+    }
+
+    public void start() {
+        stateManager = new StateManager();
+        gameThread = new Thread(this);
+        gameThread.start();
+    }
+
+    @Override
+    public void run() {
+        int frame = 0;
+        double drawInterval = 1000000000 / (double) this.fps;
+        double delta = 0;
+        double tick = 0;
+        long lastTime = System.nanoTime();
+        long currentTime;
+
+        while (this.gameThread != null) {
+            if (KeyBoard.close) {
+                this.gameThread = null;
+                this.frame.dispose();
+            }
+            currentTime = System.nanoTime();
+            double elapsedTime = (currentTime - lastTime);
+//      deltaTime += elapsedTime;
+            delta += elapsedTime / drawInterval;
+            lastTime = currentTime;
+            tick++;
+            if (delta >= 1) {
+                stateManager.update();
+                keyB.resetOnceClicks();
+                render(frame++);
+                delta = 0;
+            }
+            if (frame >= this.fps) {
+                this.frame.setTitle(tick + "");
+                tick = 0;
+                frame = 0;
+            }
+        }
+    }
+
+    public void render(int frame) {
+        paintP(Renderer.render(stateManager.currentState, frame));
+        Graphics g = getGraphics();
+        g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+        g.dispose();
+        paint(g);
+    }
+
+    private void paintP(int[] p) {
+        System.arraycopy(p, 0, pixels, 0, pixels.length);
+    }
+
+//    public void playMusic(int i) {
+//        music.setFile(i);
+//        music.play();
+//        music.loop();
+//    }
+//
+//    public void stopMusic() {
+//        music.stop();
+//    }
+//
+//    public void playSoundEffect(int i) {
+//        if (effect.clip != null) {
+//            effect.stop();
+//        }
+//        effect.setFile(i);
+//        effect.play();
+//    }
+
+    public static class KeyBoard implements KeyListener {
+
+        public static boolean upPressed,
+                downPressed,
+                leftPressed,
+                rightPressed,
+                close,
+                enterPressed,
+                backPressed,
+                shoulderLeftPressed,
+                shoulderRightPressed,
+                contextPressed,
+                lPressed;
+        public static boolean _upPressed,
+                _downPressed,
+                _leftPressed,
+                _rightPressed,
+                _close,
+                _enterPressed,
+                _backPressed,
+                _shoulderLeftPressed,
+                _shoulderRightPressed,
+                _contextPressed,
+                _lPressed;
+
+        public KeyBoard() {
+        }
+
+        @Override
+        public void keyTyped(KeyEvent e) {}
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            int code = e.getKeyCode();
+            if (code == KeyEvent.VK_W) {
+                if (!upPressed) {
+                    _upPressed = true;
+                }
+                upPressed = true;
+            }
+            if (code == KeyEvent.VK_A) {
+                if (!leftPressed) {
+                    _leftPressed = true;
+                }
+                leftPressed = true;
+            }
+            if (code == KeyEvent.VK_S) {
+                if (!downPressed) {
+                    _downPressed = true;
+                }
+                downPressed = true;
+            }
+            if (code == KeyEvent.VK_D) {
+                if (!rightPressed) {
+                    _rightPressed = true;
+                }
+                rightPressed = true;
+            }
+            if (code == KeyEvent.VK_Q) {
+                if (!shoulderLeftPressed) {
+                    _shoulderLeftPressed = true;
+                }
+                shoulderLeftPressed = true;
+            }
+            if (code == KeyEvent.VK_E) {
+                if (!shoulderRightPressed) {
+                    _shoulderRightPressed = true;
+                }
+                shoulderRightPressed = true;
+            }
+            if (code == KeyEvent.VK_ENTER) {
+                if (!enterPressed) {
+                    _enterPressed = true;
+                }
+                enterPressed = true;
+            }
+            if (code == KeyEvent.VK_BACK_SPACE) {
+                if (!backPressed) {
+                    _backPressed = true;
+                }
+                backPressed = true;
+            }
+            if (code == KeyEvent.VK_I) {
+                if (!contextPressed) {
+                    _contextPressed = true;
+                }
+                contextPressed = true;
+            }
+            if (code == KeyEvent.VK_L) {
+                if (!lPressed) {
+                    _lPressed = true;
+                }
+                lPressed = true;
+            }
+
+            if (code == KeyEvent.VK_ESCAPE) {
+                close = true;
+            }
+        }
+
+        private void resetOnceClicks() {
+            _downPressed = false;
+            _enterPressed = false;
+            _leftPressed = false;
+            _rightPressed = false;
+            _shoulderRightPressed = false;
+            _shoulderLeftPressed = false;
+            _upPressed = false;
+            _close = false;
+            _backPressed = false;
+            _contextPressed = false;
+            _lPressed = false;
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            int code = e.getKeyCode();
+
+            if (code == KeyEvent.VK_W) {
+                upPressed = false;
+            }
+            if (code == KeyEvent.VK_A) {
+                leftPressed = false;
+            }
+            if (code == KeyEvent.VK_S) {
+                downPressed = false;
+            }
+            if (code == KeyEvent.VK_D) {
+                rightPressed = false;
+            }
+            if (code == KeyEvent.VK_Q) {
+                shoulderLeftPressed = false;
+            }
+            if (code == KeyEvent.VK_E) {
+                shoulderRightPressed = false;
+            }
+            if (code == KeyEvent.VK_ENTER) {
+                enterPressed = false;
+            }
+            if (code == KeyEvent.VK_BACK_SPACE) {
+                backPressed = false;
+            }
+            if (code == KeyEvent.VK_I) {
+                contextPressed = false;
+            }
+            if (code == KeyEvent.VK_L) {
+                lPressed = false;
+            }
+        }
+    }
+}

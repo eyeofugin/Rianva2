@@ -1,0 +1,24 @@
+package de.unv.framework;
+
+import javax.swing.*;
+
+public class Main {
+    public static void main(String[] args) {
+
+        Loader.load();
+        JFrame window = new JFrame();
+        window.setBounds(0, 0, 0, 0);
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setResizable(false);
+
+        Game engine = new Game(window);
+
+        window.add(engine);
+        window.pack();
+
+        window.setLocationRelativeTo(null);
+        window.setVisible(true);
+
+        engine.start();
+    }
+}
