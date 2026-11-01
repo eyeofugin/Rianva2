@@ -1,4 +1,4 @@
-package de.unv.ui;
+package de.unv.ui.base;
 
 public enum Color {
   BLACK(0, "000"),

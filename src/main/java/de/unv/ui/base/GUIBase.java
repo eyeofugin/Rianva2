@@ -1,4 +1,4 @@
-package de.unv.ui;
+package de.unv.ui.base;
 
 import de.unv.framework.Renderer;
 import de.unv.utils.CollectionUtils;
@@ -7,20 +7,21 @@ import java.util.Arrays;
 
 public class GUIBase extends Group {
 
-    public int width, height;
     public int[] pixels;
 
+    public GUIBase(Group parent) {
+        super(parent);
+    }
+
     public GUIBase(int x, int y, int width, int height) {
-        super(x, y);
-        this.width = width;
-        this.height = height;
+        super(x, y, width, height);
         this.pixels = new int[width * height];
     }
 
     @Override
-    public void render(int frame) {
+    public void render() {
         renderPixels();
-        renderChildren(frame);
+        renderChildren();
     }
 
     public void renderPixels() {

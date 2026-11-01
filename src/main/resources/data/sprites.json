@@ -1,0 +1,35 @@
+{
+  "CinderSprite": {
+    "idle": {
+      "source": "sprites/cindersprite/idle.png",
+      "imageWidth": 64,
+      "imageHeight": 64,
+      "frameLengths": [
+        30,
+        60,
+        90
+      ]
+    },
+    "damaged": {
+      "source": "sprites/cindersprite/damaged.png",
+      "imageWidth": 64,
+      "imageHeight": 64,
+      "frameLengths": [
+        10,
+        20,
+        30,
+        40
+      ]
+    },
+    "action": {
+      "source": "sprites/cindersprite/action.png",
+      "imageWidth": 64,
+      "imageHeight": 64,
+      "frameLengths": [
+        30,
+        60,
+        90
+      ]
+    }
+  }
+}

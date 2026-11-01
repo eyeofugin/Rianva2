@@ -1,10 +1,14 @@
 package de.unv.utils;
 
-import de.unv.ui.Color;
+import de.unv.ui.base.Color;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.net.URI;
+import java.util.Arrays;
 
 public class SpriteUtils {
   public static BufferedImage flipH(BufferedImage bi) {
@@ -35,6 +39,25 @@ public class SpriteUtils {
     g.drawImage(image, 0, 0, null);
     g.dispose();
     return newImage;
+  }
+  public static int[][] splitSpriteSheet(int amntFrames, int w, int h, String path) {
+    int[][] sprite = new int[amntFrames][w * h];
+    for (int i = 0; i < amntFrames; i++) {
+      Arrays.fill(sprite[i], Color.BUFF_GREEN.VALUE);
+    }
+    try {
+      URI uri = SpriteUtils.class.getClassLoader().getResource(path).toURI();
+      BufferedImage sheet = ImageIO.read(new File(uri));
+      for (int i = 0; i < amntFrames; i++) {
+        int[] pixels = new int[w * h];
+        BufferedImage img = sheet.getSubimage(i * w, 0, w, h);
+        img.getRGB(0, 0, w, h, pixels, 0, w);
+        sprite[i] = pixels;
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return sprite;
   }
 
   public static int[] flipHorizontal(int[] p, int sideSize) {

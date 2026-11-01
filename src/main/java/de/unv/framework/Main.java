@@ -5,12 +5,12 @@ import javax.swing.*;
 public class Main {
     public static void main(String[] args) {
 
-        Loader.load();
+//        Loader.load();
         JFrame window = new JFrame();
         window.setBounds(0, 0, 0, 0);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
-
+        window.setUndecorated(true);
         Game engine = new Game(window);
 
         window.add(engine);

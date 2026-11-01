@@ -1,6 +1,8 @@
 package de.unv.framework;
 
+import de.unv.connector.EventPayload;
 import de.unv.game.states.StateManager;
+import de.unv.ui.animation.SpriteLibrary;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,6 +39,7 @@ public class Game extends JPanel implements Runnable {
     }
 
     public void start() {
+        SpriteLibrary.init();
         stateManager = new StateManager();
         gameThread = new Thread(this);
         gameThread.start();
@@ -63,9 +66,10 @@ public class Game extends JPanel implements Runnable {
             lastTime = currentTime;
             tick++;
             if (delta >= 1) {
-                stateManager.update();
+                stateManager.currentState.update(frame++);
+                System.out.println(frame);
                 keyB.resetOnceClicks();
-                render(frame++);
+                render();
                 delta = 0;
             }
             if (frame >= this.fps) {
@@ -76,8 +80,8 @@ public class Game extends JPanel implements Runnable {
         }
     }
 
-    public void render(int frame) {
-        paintP(Renderer.render(stateManager.currentState, frame));
+    public void render() {
+        paintP(Renderer.render(stateManager.currentState));
         Graphics g = getGraphics();
         g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
         g.dispose();

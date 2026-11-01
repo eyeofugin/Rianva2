@@ -1,14 +1,19 @@
-package de.unv.ui;
+package de.unv.ui.base;
 
 
 import de.unv.framework.Game;
+import de.unv.ui.animation.SpriteLibrary;
 
 public class Canvas extends GUIBase {
     public Canvas() {
         super(0, 0, Game.X, Game.Y);
+//        this.pixels = SpriteLibrary.getScene(sceneName);
     }
 
-    protected void paint(GUIBase guiBase) {
+    public void reset() {
+//        background()
+    }
+    public void paint(GUIBase guiBase) {
         fillWithGraphicsSize(this.pixels, this.width, guiBase.absX(), guiBase.absY(), guiBase.width, guiBase.height, guiBase.pixels);
     }
 

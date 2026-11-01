@@ -1,0 +1,69 @@
+{
+  "Burn": {
+    "event": {
+      "type": "TARGET_PAYS_ENERGY"
+    },
+    "conditionList": [
+      {
+        "type": "TARGET_HAS_EFFECT",
+        "effectName" : "Burning"
+      }
+    ],
+    "command": {
+      "type": "STACK_DAMAGE",
+      "finalDamagePercentage": 10,
+      "stackDamagePercentage": 5
+    }
+  },
+  "Burning1" : {
+    "type": "STATUS",
+    "name": "Burning",
+    "stack" : 0,
+    "maxStack": 3,
+    "turns": 0,
+    "children": [
+      {
+        "type": "SUBSCRIBER",
+        "subscriptions": [
+          {
+            "event": {
+              "type": "TARGET_PAYS_ENERGY"
+            },
+            "conditionList": [
+              {
+                "type": "TARGET_HAS_EFFECT",
+                "effectName" : "Burning"
+              }
+            ],
+            "command": {
+              "type": "STACK_DAMAGE",
+              "finalDamagePercentage": 10,
+              "stackDamagePercentage": 5
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "Burning" : {
+    "type": "SUBSCRIBER",
+    "subscriptions": [
+      {
+        "event": {
+          "type": "TARGET_PAYS_ENERGY"
+        },
+        "conditionList": [
+          {
+            "type": "TARGET_HAS_EFFECT",
+            "effectName" : "Burning"
+          }
+        ],
+        "command": {
+          "type": "STACK_DAMAGE",
+          "finalDamagePercentage": 10,
+          "stackDamagePercentage": 5
+        }
+      }
+    ]
+  }
+}
